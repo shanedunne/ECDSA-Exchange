@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = 3042;
+const keccak256 = require("ethereum-cryptography/keccak");
 
 // localhost can have cross origin errors
 // depending on the browser you use!
