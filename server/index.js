@@ -12,30 +12,46 @@ const secp = require("ethereum-cryptography/secp256k1");
 app.use(cors());
 app.use(express.json());
 
+// populated after createAccounts function called
 const balances = {
-  "1": 100,
-  "2": 50,
-  "3": 75,
 }
 
+// Terminal Messages
+console.log("-----------------------------------------")
+console.log("SEE ACCOUNT DETAILS BELOW")
 
 // account class
-class account {
+class Account {
   constructor(balance){
     this.privateKey = toHex(secp.utils.randomPrivateKey());
     this.publicKey = toHex(secp.getPublicKey(this.privateKey));
     this.address = `0x${this.publicKey.slice(90)}`
     this.balance = balance;
   }
-
 }
 
-var accountOne = new account(125);
-var accountTwo = new account(30);
-var accountThree = new account(200);
-console.log(accountOne)
-console.log(accountTwo)
-console.log(accountThree)
+
+// Radnom balance generator
+function randomBalanceGenerator() {
+  return Math.round(Math.random() * (125-75) + 75);
+}
+// Create accounts function
+function createAccounts(account_limit){
+  const accounts = {};
+
+  for(let i = 1; i <= account_limit; i++) {
+    accounts[i] = new Account(randomBalanceGenerator());
+    const address = accounts[i].address.toLowerCase();
+    const balance = accounts[i].balance
+    balances[address] = balance;
+
+  }
+  return accounts
+}
+const accountBatch = createAccounts(3)  
+console.log(accountBatch)
+
+
 
 
 app.get('/balance/:address', (req, res) => {
