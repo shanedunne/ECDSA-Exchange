@@ -64,23 +64,23 @@ app.get('/balance/:address', (req, res) => {
 });
 
 app.post('/send', (req, res) => {
-  const { signature, recipient, amount } = req.body;
+  const { recipient, amount, signature } = req.body;
   const message = JSON.stringify({
     to: recipient,
     amount: parseInt(amount)
   });
   const messageHash = SHA256(message).toString();
   // recover the public key (just like Ethereum does it) using msgHash, sig, recoveryBit
-  const recoveredPublicKey1 = secp.recoverPublicKey(messageHash, signature, 0).toString('hex');
+  const recoveredPublicKey1 = toHex(secp.recoverPublicKey(messageHash, signature, 0));
 
   // recover the public key (just like Ethereum does it) using msgHash, sig, recoveryBit
-  const recoveredPublicKey2 = secp.recoverPublicKey(messageHash, signature, 1).toString('hex');
+  const recoveredPublicKey2 = toHex(secp.recoverPublicKey(messageHash, signature, 1));
 
   // clean up recovered public key so that we can look up if it matches our own server records
-  const senderPublicKey1 = "0x" + toHex(utf8ToBytes(recoveredPublicKey1)).slice(-40);
+  const senderPublicKey1 = "0x" + recoveredPublicKey1.slice(recoveredPublicKey1.length - 40);
 
   // clean up recovered public key so that we can look up if it matches our own server records
-  const senderPublicKey2 = "0x" + toHex(utf8ToBytes(recoveredPublicKey2)).slice(-40);
+  const senderPublicKey2 = "0x" + recoveredPublicKey2.slice(recoveredPublicKey2.length - 40);
 
   let publicKeyMatch = true;
 
@@ -111,12 +111,6 @@ app.post('/send', (req, res) => {
   } else {
     console.error("Something seems off! Make sure you are passing in the correct values!");
   }
-  console.log(senderPublicKey1)
-  console.log(senderPublicKey2)
-  console.log(senderPublicKey)
-
-
-  console.log(publicKeyMatch)
 
 
 });

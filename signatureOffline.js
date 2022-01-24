@@ -3,13 +3,13 @@ const SHA256 = require('crypto-js/sha256');
 const { hexToBytes, concatBytes, toHex, utf8ToBytes } = require("ethereum-cryptography/utils");
 (async () => {
   // copy-paste a private key generated when running server/index.js
-  const privateKey = "6e131e209daaa7d066eab51b7912b58912cf51f6b31b0821fdb889293a1de35a";
+  const privateKey = "e5b335d26d9347a6d15a11fecce094d5f4e951ecddc3f0b8411eec59a8f5225f";
 
   // copy-paste a separate account from your server db in to
   // send an amount less than your current balance!
   const message = JSON.stringify({
-    to: "0x4a758b8bd49cf8c3e604309fade8ec9e00df3b35",
-    amount: 17
+    to: "0xaf654e0e5755f3edfab9b7806b502aa7d4dc03fa",
+    amount: 50
   });
 
   // hash your message
